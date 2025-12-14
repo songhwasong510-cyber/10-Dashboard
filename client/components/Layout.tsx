@@ -22,6 +22,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const [isDashboardOpen, setIsDashboardOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const menuItems = [
     {
@@ -44,8 +45,20 @@ export default function Layout({ children }: LayoutProps) {
 
   return (
     <div className="flex h-screen bg-white">
+      {/* Mobile Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
       {/* Sidebar */}
-      <aside className="w-[234px] border-r border-neutral-200 bg-neutral-50 flex flex-col flex-shrink-0">
+      <aside className={`
+        w-[234px] border-r border-neutral-200 bg-neutral-50 flex flex-col flex-shrink-0 z-50
+        fixed lg:static inset-y-0 left-0 transform transition-transform duration-300
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
         {/* Logo */}
         <div className="h-[52px] border-b border-neutral-200 flex items-center justify-between px-[18px]">
           <svg width="23" height="20" viewBox="0 0 23 20" fill="none">
@@ -54,7 +67,10 @@ export default function Layout({ children }: LayoutProps) {
               fill="#1D293D"
             />
           </svg>
-          <button className="w-8 h-8 flex items-center justify-center rounded hover:bg-neutral-200/50">
+          <button
+            className="w-8 h-8 flex items-center justify-center rounded hover:bg-neutral-200/50"
+            onClick={() => setIsSidebarOpen(false)}
+          >
             <Menu className="w-[18px] h-[18px] text-text-tertiary" />
           </button>
         </div>
@@ -121,9 +137,15 @@ export default function Layout({ children }: LayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
         {/* Header */}
-        <header className="h-[52px] border-b border-neutral-200 bg-white flex items-center justify-end px-5 flex-shrink-0">
+        <header className="h-[52px] border-b border-neutral-200 bg-white flex items-center justify-between lg:justify-end px-5 flex-shrink-0">
+          <button
+            className="lg:hidden w-8 h-8 flex items-center justify-center rounded hover:bg-neutral-50"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <Menu className="w-[18px] h-[18px] text-text-tertiary" />
+          </button>
           <div className="flex items-center gap-1">
             {/* Notifications */}
             <button className="p-2 rounded hover:bg-neutral-50 relative">
