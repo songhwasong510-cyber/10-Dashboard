@@ -112,7 +112,8 @@ export default function Index() {
                 </div>
               </div>
             }
-            label="비인가 에이전트{'\n'}접근 시도"
+            label="비인가 에이전트
+접근 시도"
             value="1"
             bgColor="bg-transparent"
           />
@@ -142,7 +143,8 @@ export default function Index() {
                 </div>
               </div>
             }
-            label="사용자{'\n'}(MAU)"
+            label="사용자
+(MAU)"
             value="89"
             bgColor="bg-transparent"
           />
@@ -157,7 +159,8 @@ export default function Index() {
                 </div>
               </div>
             }
-            label="총 토큰{'\n'}사용량"
+            label="총 토큰
+사용량"
             value="13.20M"
             bgColor="bg-transparent"
           />
@@ -172,7 +175,8 @@ export default function Index() {
                 </div>
               </div>
             }
-            label="추론{'\n'}토큰"
+            label="추론
+토큰"
             value="117.1K"
             bgColor="bg-transparent"
           />
