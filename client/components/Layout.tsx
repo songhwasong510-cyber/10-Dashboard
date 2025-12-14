@@ -177,7 +177,9 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-white">
-          {children}
+          <div className="w-full">
+            {children}
+          </div>
         </main>
       </div>
     </div>

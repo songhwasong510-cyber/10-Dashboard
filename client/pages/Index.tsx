@@ -100,7 +100,7 @@ export default function Index() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-[14px] mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-[14px] mb-6">
           <StatCard
             icon={
               <div className="w-[38px] h-[38px] relative">
@@ -183,7 +183,7 @@ export default function Index() {
         </div>
 
         {/* Charts Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_455px] gap-[14px]">
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_455px] gap-[14px]">
           {/* Chart: Unauthorized Access */}
           <div className="rounded-lg border border-neutral-200 shadow-sm bg-white">
             <div className="h-[46px] border-b border-neutral-200 px-5 flex items-center">
@@ -226,7 +226,7 @@ export default function Index() {
                       <div key={idx} className="flex flex-col items-center flex-1 max-w-[45px]">
                         <div className="w-full flex items-end justify-center h-full mb-1">
                           <div
-                            className="w-7 bg-[#00A6F4] rounded-t"
+                            className="w-7 bg-[#00A6F4] rounded-t-[4px]"
                             style={{ height: `${barHeight}%` }}
                           ></div>
                         </div>
