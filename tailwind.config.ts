@@ -22,10 +22,15 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          50: "#DBEAFE",
+          600: "#1447E6",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+          "02-400": "#00A6F4",
+          "03-050": "#E0E7FF",
+          "03-400": "#615FFF",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -56,6 +61,22 @@ export default {
           "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
+        },
+        neutral: {
+          50: "#F1F5F9",
+          200: "#CAD5E2",
+          400: "#62748E",
+        },
+        text: {
+          primary: "#0F172B",
+          secondary: "#314158",
+          tertiary: "#45556C",
+        },
+        success: {
+          soft: {
+            bg: "#D0FAE5",
+            color: "#006045",
+          },
         },
       },
       borderRadius: {
