@@ -106,7 +106,18 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+    font-family:
+      "Pretendard Variable",
+      -apple-system,
+      BlinkMacSystemFont,
+      system-ui,
+      Roboto,
+      "Helvetica Neue",
+      "Segoe UI",
+      "Apple SD Gothic Neo",
+      "Noto Sans KR",
+      "Malgun Gothic",
+      sans-serif;
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {

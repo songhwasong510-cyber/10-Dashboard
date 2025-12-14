@@ -1,18 +1,18 @@
 import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { 
-  BarChart3, 
-  User, 
-  Building, 
-  MessageSquare, 
-  Clock, 
-  Settings, 
+import {
+  BarChart3,
+  User,
+  Building,
+  MessageSquare,
+  Clock,
+  Settings,
   HelpCircle,
   Bell,
   FileText,
   ChevronDown,
   ChevronUp,
-  Menu
+  Menu,
 } from "lucide-react";
 
 interface LayoutProps {
@@ -36,7 +36,12 @@ export default function Layout({ children }: LayoutProps) {
       ],
     },
     { id: "account", label: "계정", icon: User, path: "/account" },
-    { id: "organization", label: "조직", icon: Building, path: "/organization" },
+    {
+      id: "organization",
+      label: "조직",
+      icon: Building,
+      path: "/organization",
+    },
     { id: "agent", label: "에이전트", icon: MessageSquare, path: "/agent" },
     { id: "logs", label: "로그", icon: Clock, path: "/logs" },
     { id: "system", label: "시스템", icon: Settings, path: "/system-settings" },
@@ -54,11 +59,13 @@ export default function Layout({ children }: LayoutProps) {
       )}
 
       {/* Sidebar */}
-      <aside className={`
+      <aside
+        className={`
         w-[234px] border-r border-neutral-200 bg-neutral-50 flex flex-col flex-shrink-0 z-50
         fixed lg:static inset-y-0 left-0 transform transition-transform duration-300
-        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+      `}
+      >
         {/* Logo */}
         <div className="h-[52px] border-b border-neutral-200 flex items-center justify-between px-[18px]">
           <svg width="23" height="20" viewBox="0 0 23 20" fill="none">
@@ -79,7 +86,9 @@ export default function Layout({ children }: LayoutProps) {
         <nav className="flex-1 px-3 py-[6px] overflow-y-auto">
           {menuItems.map((item) => {
             const Icon = item.icon;
-            const isActive = location.pathname === item.path || (item.id === "dashboard" && location.pathname === "/");
+            const isActive =
+              location.pathname === item.path ||
+              (item.id === "dashboard" && location.pathname === "/");
             const hasSubItems = item.subItems && item.subItems.length > 0;
 
             return (
@@ -100,13 +109,12 @@ export default function Layout({ children }: LayoutProps) {
                     <Icon className="w-[18px] h-[18px]" />
                     <span>{item.label}</span>
                   </div>
-                  {hasSubItems && (
-                    isDashboardOpen ? (
+                  {hasSubItems &&
+                    (isDashboardOpen ? (
                       <ChevronUp className="w-[18px] h-[18px] text-text-tertiary" />
                     ) : (
                       <ChevronDown className="w-[18px] h-[18px] text-text-tertiary" />
-                    )
-                  )}
+                    ))}
                 </button>
 
                 {/* Sub Items */}
@@ -170,16 +178,16 @@ export default function Layout({ children }: LayoutProps) {
               <div className="w-8 h-8 rounded-full border border-neutral-200 bg-white flex items-center justify-center">
                 <span className="text-sm text-neutral-400">GD</span>
               </div>
-              <span className="text-sm font-bold text-text-secondary">홍길동</span>
+              <span className="text-sm font-bold text-text-secondary">
+                홍길동
+              </span>
             </div>
           </div>
         </header>
 
         {/* Page Content */}
         <main className="flex-1 overflow-y-auto bg-white">
-          <div className="w-full">
-            {children}
-          </div>
+          <div className="w-full">{children}</div>
         </main>
       </div>
     </div>
