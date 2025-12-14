@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 현황 - 대시보드</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-primary-50: #DBEAFE;
+            --color-primary-600: #1447E6;
+            --color-text-primary: #0F172B;
+            --color-text-secondary: #314158;
+            --color-text-tertiary: #45556C;
+            --color-neutral-50: #F1F5F9;
+            --color-neutral-200: #CAD5E2;
+            --color-neutral-400: #62748E;
+            --color-danger: #E7000B;
+            --color-success-light: #D0FAE5;
+            --color-success: #00BC7D;
+            --color-success-dark: #006045;
+            --color-info-cyan: #00A6F4;
+            --color-info-purple: #615FFF;
+            --color-info-purple-dark: #432DD7;
+            --color-white: #FFF;
+            --color-bg-gradient-1: #DBEAFE;
+            --color-bg-gradient-2: #E0E7FF;
+        }
+
+        body {
+            font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', sans-serif;
+            background: white;
+            color: var(--color-text-primary);
+            line-height: 1.5;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            width: 234px;
+            border-right: 1px solid var(--color-neutral-200);
+            background: var(--color-neutral-50);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-header {
+            height: 52px;
+            border-bottom: 1px solid var(--color-neutral-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 18px;
+        }
+
+        .logo {
+            width: 23px;
+            height: 20px;
+        }
+
+        .menu-toggle-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-toggle-btn:hover {
+            background: rgba(202, 213, 226, 0.3);
+        }
+
+        .menu-icon {
+            width: 18px;
+            height: 18px;
+            color: var(--color-text-tertiary);
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 6px 12px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 10px;
+            border-radius: 4px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            transition: all 0.2s;
+            text-align: left;
+            width: 100%;
+        }
+
+        .menu-item:hover {
+            background: rgba(202, 213, 226, 0.2);
+        }
+
+        .menu-item.active {
+            color: var(--color-primary-600);
+        }
+
+        .menu-item-content {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .menu-item-icon {
+            width: 18px;
+            height: 18px;
+            color: currentColor;
+        }
+
+        .submenu {
+            display: none;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .submenu.open {
+            display: flex;
+        }
+
+        .submenu-item {
+            display: flex;
+            align-items: center;
+            margin-left: 12px;
+            padding: 8px 8px 8px 8px;
+            border-left: 4px solid var(--color-neutral-400);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--color-neutral-400);
+            transition: all 0.2s;
+        }
+
+        .submenu-item:hover {
+            background: rgba(202, 213, 226, 0.2);
+        }
+
+        .submenu-item.active {
+            border-left-color: var(--color-primary-600);
+            background: white;
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08);
+            color: var(--color-primary-600);
+        }
+
+        .submenu-item span {
+            margin-left: 8px;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            height: 52px;
+            border-bottom: 1px solid var(--color-neutral-200);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        .header-button {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .header-button:hover {
+            background: rgba(241, 245, 249, 1);
+        }
+
+        .header-button svg {
+            width: 18px;
+            height: 18px;
+            color: var(--color-text-tertiary);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--color-danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 12px;
+            min-width: 18px;
+            text-align: center;
+            line-height: 14px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-left: auto;
+        }
+
+        .user-profile:hover {
+            background: rgba(241, 245, 249, 1);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--color-neutral-200);
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--color-neutral-400);
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .page-container {
+            padding: 24px;
+            max-width: 1400px;
+        }
+
+        /* ===== BREADCRUMB ===== */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .breadcrumb-item {
+            color: var(--color-neutral-400);
+            padding: 0 4px;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--color-text-primary);
+        }
+
+        .breadcrumb-separator {
+            color: var(--color-text-secondary);
+        }
+
+        /* ===== PAGE HEADER ===== */
+        .page-header {
+            margin-bottom: 24px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid #BEDBFF;
+            background: linear-gradient(90deg, var(--color-bg-gradient-1) 0%, var(--color-bg-gradient-2) 100%);
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08), 0 2px 4px rgba(50, 56, 62, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-icon {
+            width: 38px;
+            height: 38px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .page-header-icon-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(6.5px);
+            border-radius: 8px;
+        }
+
+        .page-header-icon-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-header-icon-inner svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .page-header-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        /* ===== FILTERS ===== */
+        .filters {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 12px;
+            height: 32px;
+            border-radius: 4px;
+            border: 1px solid var(--color-neutral-200);
+            background: white;
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08);
+            font-size: 14px;
+            color: var(--color-text-tertiary);
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 0 6px;
+            height: 20px;
+            border-radius: 12px;
+            background: var(--color-primary-50);
+            font-size: 12px;
+            font-weight: 400;
+            color: #193CB8;
+        }
+
+        .filter-chip-close {
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            background: transparent;
+            border: none;
+        }
+
+        .filter-chip-close svg {
+            width: 18px;
+            height: 18px;
+            color: #193CB8;
+        }
+
+        .filter-date-range {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .filter-reset-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--color-neutral-200);
+            background: transparent;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .filter-reset-btn:hover {
+            background: rgba(241, 245, 249, 1);
+        }
+
+        /* ===== STAT CARDS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stat-card {
+            min-width: 220px;
+            height: 150px;
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral-200);
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08), 0 2px 4px rgba(50, 56, 62, 0.08);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: white;
+        }
+
+        .stat-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+        }
+
+        .stat-card-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            line-height: 1.4;
+            max-width: 120px;
+            word-break: keep-all;
+        }
+
+        .stat-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .stat-card-icon-bg {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(6.5px);
+            border-radius: 8px;
+        }
+
+        .stat-card-icon-inner {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card-icon-inner svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .stat-card-value {
+            font-size: 30px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            line-height: 1.33;
+        }
+
+        /* ===== CHARTS ===== */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 455px;
+            gap: 14px;
+        }
+
+        @media (max-width: 1280px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-container {
+            border-radius: 8px;
+            border: 1px solid var(--color-neutral-200);
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08), 0 2px 4px rgba(50, 56, 62, 0.08);
+            background: white;
+            overflow: hidden;
+        }
+
+        .chart-header {
+            height: 46px;
+            border-bottom: 1px solid var(--color-neutral-200);
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .chart-content {
+            padding: 20px;
+        }
+
+        .chart-legend {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ===== BAR CHART ===== */
+        .chart-area {
+            position: relative;
+            height: 310px;
+        }
+
+        .chart-grid {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+        }
+
+        .grid-line {
+            border-bottom: 1px solid var(--color-neutral-400);
+            opacity: 1;
+        }
+
+        .grid-line.dashed {
+            border-bottom-style: dashed;
+        }
+
+        .y-axis-labels {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--color-text-primary);
+            text-align: right;
+            padding-right: 8px;
+        }
+
+        .y-axis-label {
+            line-height: 1;
+        }
+
+        .chart-bars {
+            position: absolute;
+            left: 32px;
+            right: 0;
+            bottom: 32px;
+            top: 0;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            padding: 0 16px;
+        }
+
+        .bar-group {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            flex: 1;
+            max-width: 45px;
+            height: 100%;
+            gap: 0;
+            position: relative;
+        }
+
+        .bar {
+            width: 28px;
+            background: var(--color-info-cyan);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .x-axis-labels {
+            position: absolute;
+            left: 32px;
+            right: 0;
+            bottom: -28px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 0 16px;
+            font-size: 12px;
+            color: var(--color-text-primary);
+            font-weight: 400;
+        }
+
+        .x-axis-label {
+            flex: 1;
+            max-width: 45px;
+            text-align: center;
+        }
+
+        .x-axis-label.active {
+            color: var(--color-primary-600);
+            font-weight: 700;
+        }
+
+        .chart-line-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            background: var(--color-text-primary);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 1px 2px rgba(50, 56, 62, 0.08), 0 2px 4px rgba(50, 56, 62, 0.08);
+        }
+
+        .tooltip-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tooltip-label {
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .tooltip-value {
+            font-weight: 700;
+            font-size: 26px;
+            line-height: 1.2;
+        }
+
+        /* ===== CIRCULAR PROGRESS ===== */
+        .system-status-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 400px;
+        }
+
+        .circular-progress {
+            position: relative;
+            width: 232px;
+            height: 232px;
+        }
+
+        .circular-progress svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .status-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--color-success-dark);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                z-index: 40;
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                max-height: 100vh;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                width: 100%;
+            }
+
+            .page-container {
+                padding: 16px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-date-range {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                width: 100%;
+            }
+
+            .header {
+                padding: 0 12px;
+            }
+
+            .page-container {
+                padding: 12px;
+            }
+
+            .page-header {
+                padding: 12px 15px;
+            }
+
+            .filters {
+                gap: 4px;
+            }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-neutral-200);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-neutral-400);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <svg class="logo" viewBox="0 0 23 20" fill="none">
+                    <path d="M14.0622 0C14.24 0 14.4147 0.0460062 14.5674 0.131673C14.7201 0.218926 14.8475 0.342667 14.9341 0.493377L22.8725 14.1794C22.9559 14.3238 23 14.4856 23 14.6522C23 14.8172 22.9559 14.9806 22.8725 15.1249L20.3324 19.505C20.2458 19.6542 20.1199 19.7795 19.9657 19.8667C19.813 19.954 19.6383 20 19.4604 20H3.53798C3.36013 20 3.18544 19.954 3.03278 19.8667C2.88012 19.7795 2.75263 19.6542 2.66607 19.505L0.127481 15.1249C0.0440676 14.9806 0 14.8172 0 14.6522C0 14.4872 0.0440676 14.3238 0.127481 14.1794L8.06432 0.493377C8.15088 0.344253 8.27836 0.218926 8.43103 0.131673C8.58369 0.0444198 8.75838 0 8.93623 0H14.0622ZM5.98214 15.1186C5.98214 15.1186 9.2085 12.9325 11.4984 12.9325C13.7884 12.9325 17.0147 15.1186 17.0147 15.1186L11.4984 5.46046L5.98214 15.1186Z" fill="#1D293D"/>
+                </svg>
+                <button class="menu-toggle-btn" onclick="toggleSidebar()">
+                    <svg class="menu-icon" viewBox="0 0 18 18" fill="none">
+                        <path d="M2.25 2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25ZM6 3.75V14.25H3V3.75H6ZM7.5 3.75V14.25H15V3.75H7.5Z" fill="#45556C"/>
+                    </svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="menu-item active" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M2.25 2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25ZM3 3.75V14.25H15V3.75H3ZM5.25 9.75H6.75V12.75H5.25V9.75ZM8.25 5.25H9.75V12.75H8.25V5.25ZM11.25 7.5H12.75V12.75H11.25V7.5Z" fill="currentColor"/>
+                        </svg>
+                        <span>대시보드</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 8.1213L5.28722 11.8337L4.22656 10.773L8.99949 6L13.7725 10.773L12.7118 11.8337L8.99949 8.1213Z" fill="currentColor"/>
+                    </svg>
+                </button>
+                <div class="submenu open" id="dashboardSubmenu">
+                    <a href="#" class="submenu-item active"><span>서비스 현황</span></a>
+                    <a href="#" class="submenu-item"><span>시스템 현황</span></a>
+                </div>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M15 16.5H13.5V15C13.5 13.7573 12.4927 12.75 11.25 12.75H6.75C5.50736 12.75 4.5 13.7573 4.5 15V16.5H3V15C3 12.929 4.67893 11.25 6.75 11.25H11.25C13.321 11.25 15 12.929 15 15V16.5ZM9 9.75C6.51472 9.75 4.5 7.73527 4.5 5.25C4.5 2.76472 6.51472 0.75 9 0.75C11.4853 0.75 13.5 2.76472 13.5 5.25C13.5 7.73527 11.4853 9.75 9 9.75ZM9 8.25C10.6568 8.25 12 6.90686 12 5.25C12 3.59314 10.6568 2.25 9 2.25C7.34314 2.25 6 3.59314 6 5.25C6 6.90686 7.34314 8.25 9 8.25Z" fill="currentColor"/>
+                        </svg>
+                        <span>계정</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M15.75 14.25H17.25V15.75H0.75V14.25H2.25V3C2.25 2.58579 2.58579 2.25 3 2.25H10.5C10.9142 2.25 11.25 2.58579 11.25 3V14.25H14.25V8.25H12.75V6.75H15C15.4142 6.75 15.75 7.08579 15.75 7.5V14.25ZM3.75 3.75V14.25H9.75V3.75H3.75ZM5.25 8.25H8.25V9.75H5.25V8.25ZM5.25 5.25H8.25V6.75H5.25V5.25Z" fill="currentColor"/>
+                        </svg>
+                        <span>조직</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M11.9993 2.25001C14.4848 2.25001 16.5 4.27142 16.5 6.74562V15.75H6.00074C3.5152 15.75 1.50001 13.7286 1.50001 11.2544V8.25005H3.00001V11.2544C3.00001 12.9032 4.3466 14.25 6.00074 14.25H15V6.74562C15 5.09687 13.6534 3.75001 11.9993 3.75001H7.5V2.25001H11.9993ZM7.5 9.75005H6.00002V8.25005H7.5V9.75005ZM12 9.75005H10.5V8.25005H12V9.75005ZM2.64698 0.989506C2.77938 0.670164 3.22063 0.670165 3.35303 0.989506L3.54273 1.448C3.86666 2.2301 4.47116 2.85464 5.23096 3.19264L5.7693 3.43214C6.07701 3.56925 6.07697 4.01716 5.7693 4.15431L5.19947 4.40773C4.45874 4.73719 3.86504 5.3396 3.53541 6.09596L3.35011 6.52004C3.21477 6.83063 2.78525 6.83063 2.64991 6.52004L2.4646 6.09596C2.13496 5.33961 1.54129 4.73719 0.800542 4.40773L0.230717 4.15431C-0.0768878 4.01716 -0.0769237 3.56925 0.230717 3.43214L0.76905 3.19264C1.52884 2.85464 2.13335 2.23012 2.45729 1.448L2.64698 0.989506Z" fill="currentColor"/>
+                        </svg>
+                        <span>에이전트</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M9 1.5C13.1421 1.5 16.5 4.85786 16.5 9C16.5 13.1421 13.1421 16.5 9 16.5C7.7235 16.5 6.52144 16.1811 5.46922 15.6186L1.5 16.5L2.38222 12.5323C1.81922 11.4797 1.5 10.2771 1.5 9C1.5 4.85786 4.85786 1.5 9 1.5ZM9 3C5.68629 3 3 5.68629 3 9C3 10.001 3.24422 10.9636 3.7049 11.8248L3.96714 12.3151L3.47584 14.5247L5.68642 14.0338L6.17638 14.2958C7.03736 14.756 7.99942 15 9 15C12.3137 15 15 12.3137 15 9C15 5.68629 12.3137 3 9 3ZM9.75 5.25V9H12.75V10.5H8.25V5.25H9.75Z" fill="currentColor"/>
+                        </svg>
+                        <span>로그</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M2.50508 12.7503C2.18089 12.1887 1.93756 11.6028 1.77148 11.0057C2.50084 10.6335 3.00028 9.87522 3.00028 9.00027C3.00028 8.126 2.50159 7.36812 1.77313 6.99568C2.10817 5.7875 2.74441 4.66232 3.64904 3.74263C4.33601 4.18824 5.2425 4.24163 6.00028 3.80412C6.75805 3.36662 7.16506 2.55488 7.12264 1.73715C8.37146 1.41357 9.66401 1.42515 10.8778 1.73909C10.8361 2.55617 11.2431 3.36696 12.0003 3.80412C12.7581 4.24161 13.6645 4.18824 14.3514 3.74267C14.7855 4.18502 15.1713 4.68875 15.4955 5.25028C15.8196 5.8118 16.063 6.39781 16.2291 6.99483C15.4997 7.36697 15.0003 8.12532 15.0003 9.00027C15.0003 9.87462 15.4989 10.6324 16.2274 11.0049C15.8924 12.213 15.2562 13.3382 14.3515 14.2579C13.6645 13.8123 12.7581 13.7589 12.0003 14.1964C11.2425 14.6339 10.8355 15.4457 10.8779 16.2634C9.62914 16.587 8.33659 16.5754 7.12273 16.2615C7.16442 15.4443 6.75745 14.6336 6.00028 14.1964C5.24252 13.7589 4.33608 13.8123 3.64912 14.2578C3.21511 13.8155 2.82928 13.3118 2.50508 12.7503ZM6.75028 12.8974C7.56881 13.37 8.15666 14.1171 8.43821 14.9745C8.81194 15.0101 9.18814 15.0106 9.56194 14.9757C9.84334 14.1179 10.4313 13.3702 11.2503 12.8974C12.0692 12.4245 13.0107 12.2892 13.8944 12.4744C14.1114 12.1681 14.2991 11.842 14.4552 11.5006C13.8534 10.8281 13.5003 9.94542 13.5003 9.00027C13.5003 8.05512 13.8534 7.17252 14.4552 6.5C14.3771 6.3305 14.2908 6.16379 14.1964 6.00028C14.102 5.83676 14.0007 5.67873 13.893 5.52644C13.0098 5.71119 12.0688 5.57573 11.2503 5.10316C10.4317 4.63058 9.84394 3.88338 9.56231 3.02603C9.18866 2.99048 8.81239 2.98997 8.43866 3.02481C8.15719 3.88265 7.56919 4.63035 6.75028 5.10316C5.93134 5.57597 4.98982 5.71133 4.1062 5.52614C3.88912 5.83243 3.70146 6.1585 3.54541 6.4999C4.14709 7.17245 4.50028 8.05512 4.50028 9.00027C4.50028 9.94542 4.14711 10.828 3.54541 11.5005C3.62349 11.67 3.70972 11.8368 3.80413 12.0003C3.89853 12.1638 3.99979 12.3218 4.10758 12.4741C4.99081 12.2894 5.93177 12.4248 6.75028 12.8974ZM9.00026 11.2503C7.75766 11.2503 6.75028 10.2429 6.75028 9.00027C6.75028 7.75767 7.75766 6.75028 9.00026 6.75028C10.2429 6.75028 11.2503 7.75767 11.2503 9.00027C11.2503 10.2429 10.2429 11.2503 9.00026 11.2503ZM9.00026 9.75027C9.41449 9.75027 9.75026 9.4145 9.75026 9.00027C9.75026 8.58605 9.41449 8.25027 9.00026 8.25027C8.58604 8.25027 8.25026 8.58605 8.25026 9.00027C8.25026 9.4145 8.58604 9.75027 9.00026 9.75027Z" fill="currentColor"/>
+                        </svg>
+                        <span>시스템</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="menu-item" onclick="toggleSubmenu(event)">
+                    <div class="menu-item-content">
+                        <svg class="menu-item-icon" viewBox="0 0 18 18" fill="none">
+                            <path d="M4.09091 11.25L0.75 13.875V2.25C0.75 1.83579 1.08579 1.5 1.5 1.5H12.75C13.1642 1.5 13.5 1.83579 13.5 2.25V11.25H4.09091ZM3.57211 9.75H12V3H2.25V10.7888L3.57211 9.75ZM6 12.75H13.6779L15 13.7888V6H15.75C16.1642 6 16.5 6.33579 16.5 6.75V16.875L13.1591 14.25H6.75C6.33579 14.25 6 13.9142 6 13.5V12.75Z" fill="currentColor"/>
+                        </svg>
+                        <span>지원</span>
+                    </div>
+                    <svg style="width: 18px; height: 18px; color: var(--color-text-tertiary);" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="currentColor"/>
+                    </svg>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+            <!-- HEADER -->
+            <header class="header">
+                <button class="header-button" onclick="toggleSidebar()" style="margin-right: auto; display: none;" id="mobileMenuBtn">
+                    <svg viewBox="0 0 18 18" fill="none">
+                        <path d="M2.25 2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25ZM6 3.75V14.25H3V3.75H6ZM7.5 3.75V14.25H15V3.75H7.5Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="header-button" title="Notifications">
+                    <svg viewBox="0 0 18 18" fill="none">
+                        <path d="M15 12.75H16.5V14.25H1.5V12.75H3V7.5C3 4.18629 5.68629 1.5 9 1.5C12.3137 1.5 15 4.18629 15 7.5V12.75ZM13.5 12.75V7.5C13.5 5.01472 11.4853 3 9 3C6.51472 3 4.5 5.01472 4.5 7.5V12.75H13.5ZM6.75 15.75H11.25V17.25H6.75V15.75Z" fill="currentColor"/>
+                    </svg>
+                    <span class="notification-badge">10</span>
+                </button>
+
+                <button class="header-button" title="Files">
+                    <svg viewBox="0 0 18 18" fill="none">
+                        <path d="M14.25 16.5H3.75C2.50736 16.5 1.5 15.4927 1.5 14.25V2.25C1.5 1.83579 1.83579 1.5 2.25 1.5H12.75C13.1642 1.5 13.5 1.83579 13.5 2.25V11.25H16.5V14.25C16.5 15.4927 15.4927 16.5 14.25 16.5ZM13.5 12.75V14.25C13.5 14.6642 13.8358 15 14.25 15C14.6642 15 15 14.6642 15 14.25V12.75H13.5ZM12 15V3H3V14.25C3 14.6642 3.33579 15 3.75 15H12ZM4.5 5.25H10.5V6.75H4.5V5.25ZM4.5 8.25H10.5V9.75H4.5V8.25ZM4.5 11.25H8.25V12.75H4.5V11.25Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <button class="header-button" title="Messages">
+                    <svg viewBox="0 0 18 18" fill="none">
+                        <path d="M11.9993 2.25001C14.4848 2.25001 16.5 4.27142 16.5 6.74562V15.75H6.00074C3.5152 15.75 1.50001 13.7286 1.50001 11.2544V8.25005H3.00001V11.2544C3.00001 12.9032 4.3466 14.25 6.00074 14.25H15V6.74562C15 5.09687 13.6534 3.75001 11.9993 3.75001H7.5V2.25001H11.9993ZM7.5 9.75005H6.00002V8.25005H7.5V9.75005ZM12 9.75005H10.5V8.25005H12V9.75005ZM2.64698 0.989506C2.77938 0.670164 3.22063 0.670165 3.35303 0.989506L3.54273 1.448C3.86666 2.2301 4.47116 2.85464 5.23096 3.19264L5.7693 3.43214C6.07701 3.56925 6.07697 4.01716 5.7693 4.15431L5.19947 4.40773C4.45874 4.73719 3.86504 5.3396 3.53541 6.09596L3.35011 6.52004C3.21477 6.83063 2.78525 6.83063 2.64991 6.52004L2.4646 6.09596C2.13496 5.33961 1.54129 4.73719 0.800542 4.40773L0.230717 4.15431C-0.0768878 4.01716 -0.0769237 3.56925 0.230717 3.43214L0.76905 3.19264C1.52884 2.85464 2.13335 2.23012 2.45729 1.448L2.64698 0.989506Z" fill="currentColor"/>
+                    </svg>
+                </button>
+
+                <div class="user-profile">
+                    <div class="user-avatar">GD</div>
+                    <span class="user-name">홍길동</span>
+                </div>
+            </header>
+
+            <!-- PAGE CONTENT -->
+            <div class="content">
+                <div class="page-container">
+                    <!-- BREADCRUMB -->
+                    <div class="breadcrumb">
+                        <span class="breadcrumb-item">대시보드</span>
+                        <span class="breadcrumb-separator">/</span>
+                        <span class="breadcrumb-item active">서비스 현황</span>
+                    </div>
+
+                    <!-- PAGE HEADER -->
+                    <div class="page-header">
+                        <div class="page-header-icon">
+                            <div class="page-header-icon-bg"></div>
+                            <div class="page-header-icon-inner">
+                                <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                    <path d="M2.49935 2.5H17.4993C17.9596 2.5 18.3327 2.8731 18.3327 3.33333V16.6667C18.3327 17.1269 17.9596 17.5 17.4993 17.5H2.49935C2.03912 17.5 1.66602 17.1269 1.66602 16.6667V3.33333C1.66602 2.8731 2.03912 2.5 2.49935 2.5ZM5.83268 10.8333V14.1667H7.49935V10.8333H5.83268ZM9.16602 5.83333V14.1667H10.8327V5.83333H9.16602ZM12.4993 8.33333V14.1667H14.166V8.33333H12.4993Z" fill="white"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <h1 class="page-header-title">서비스 현황</h1>
+                    </div>
+
+                    <!-- FILTERS -->
+                    <div class="filters">
+                        <div class="filter-select">
+                            <div class="filter-chip">
+                                <span>아이티센글로벌</span>
+                                <button class="filter-chip-close">
+                                    <svg viewBox="0 0 18 18" fill="none">
+                                        <path d="M14.25 4.8075L13.1925 3.75L9 7.9425L4.8075 3.75L3.75 4.8075L7.9425 9L3.75 13.1925L4.8075 14.25L9 10.0575L13.1925 14.25L14.25 13.1925L10.0575 9L14.25 4.8075Z" fill="currentColor"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <svg viewBox="0 0 18 18" fill="none" style="width: 18px; height: 18px;">
+                                <path d="M8.99949 9.87831L12.7118 6.16602L13.7725 7.22667L8.99949 11.9997L4.22656 7.22667L5.28722 6.16602L8.99949 9.87831Z" fill="#1D293D"/>
+                            </svg>
+                        </div>
+
+                        <div class="filter-date-range">
+                            <div class="filter-select">
+                                <span>시작일</span>
+                                <div class="filter-chip">
+                                    <span>2025-12-05</span>
+                                    <button class="filter-chip-close">
+                                        <svg viewBox="0 0 18 18" fill="none">
+                                            <path d="M14.25 4.8075L13.1925 3.75L9 7.9425L4.8075 3.75L3.75 4.8075L7.9425 9L3.75 13.1925L4.8075 14.25L9 10.0575L13.1925 14.25L14.25 13.1925L10.0575 9L14.25 4.8075Z" fill="currentColor"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <svg viewBox="0 0 18 18" fill="none" style="width: 18px; height: 18px;">
+                                    <path d="M6.75 0.75V2.25H11.25V0.75H12.75V2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25H5.25V0.75H6.75ZM15 8.25H3V14.25H15V8.25ZM5.25 3.75H3V6.75H15V3.75H12.75V5.25H11.25V3.75H6.75V5.25H5.25V3.75Z" fill="#1D293D"/>
+                                </svg>
+                            </div>
+
+                            <span style="color: var(--color-text-tertiary); font-size: 14px;">~</span>
+
+                            <div class="filter-select">
+                                <span>종료일</span>
+                                <div class="filter-chip">
+                                    <span>2025-12-12</span>
+                                    <button class="filter-chip-close">
+                                        <svg viewBox="0 0 18 18" fill="none">
+                                            <path d="M14.25 4.8075L13.1925 3.75L9 7.9425L4.8075 3.75L3.75 4.8075L7.9425 9L3.75 13.1925L4.8075 14.25L9 10.0575L13.1925 14.25L14.25 13.1925L10.0575 9L14.25 4.8075Z" fill="currentColor"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <svg viewBox="0 0 18 18" fill="none" style="width: 18px; height: 18px;">
+                                    <path d="M6.75 0.75V2.25H11.25V0.75H12.75V2.25H15.75C16.1642 2.25 16.5 2.58579 16.5 3V15C16.5 15.4142 16.1642 15.75 15.75 15.75H2.25C1.83579 15.75 1.5 15.4142 1.5 15V3C1.5 2.58579 1.83579 2.25 2.25 2.25H5.25V0.75H6.75ZM15 8.25H3V14.25H15V8.25ZM5.25 3.75H3V6.75H15V3.75H12.75V5.25H11.25V3.75H6.75V5.25H5.25V3.75Z" fill="#1D293D"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <button class="filter-reset-btn">
+                            <svg viewBox="0 0 18 18" fill="none" style="width: 18px; height: 18px;">
+                                <path d="M16.5 9C16.5 13.1421 13.1422 16.5 9 16.5C4.8579 16.5 1.5 13.1421 1.5 9C1.5 4.85786 4.8579 1.5 9 1.5V3C5.68627 3 3 5.68629 3 9C3 12.3137 5.68627 15 9 15C12.3137 15 15 12.3137 15 9C15 6.93767 13.9595 5.11835 12.3748 4.03838L12.375 6H10.875V1.5H15.375V3L13.5006 2.99992C15.322 4.36826 16.5 6.54655 16.5 9Z" fill="#1D293D"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- STATS GRID -->
+                    <div class="stats-grid">
+                        <!-- Stat 1 -->
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div class="stat-card-label">비인가 에이전트<br>접근 시도</div>
+                                <div class="stat-card-icon" style="background: #E8F3FF;">
+                                    <div class="stat-card-icon-bg"></div>
+                                    <div class="stat-card-icon-inner" style="background: #1447E6; border-radius: 6px;">
+                                        <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                            <path d="M3.3335 16.667V11.667C3.3335 7.98509 6.31827 5.00033 10.0002 5.00033C13.6821 5.00033 16.6668 7.98509 16.6668 11.667V16.667H17.5002V18.3337H2.50017V16.667H3.3335ZM5.00017 11.667H6.66684C6.66684 9.82608 8.15922 8.33366 10.0002 8.33366V6.66699C7.23874 6.66699 5.00017 8.90558 5.00017 11.667ZM9.16683 1.66699H10.8335V4.16699H9.16683V1.66699ZM16.482 4.00667L17.6605 5.18518L15.8927 6.95295L14.7142 5.77443L16.482 4.00667ZM2.33984 5.18518L3.51835 4.00667L5.28612 5.77443L4.10761 6.95295L2.33984 5.18518Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card-value">1</div>
+                        </div>
+
+                        <!-- Stat 2 -->
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div class="stat-card-label">총  질문 횟수</div>
+                                <div class="stat-card-icon" style="background: #D0FAE5;">
+                                    <div class="stat-card-icon-bg"></div>
+                                    <div class="stat-card-icon-inner" style="background: #00BC7D; border-radius: 6px;">
+                                        <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                            <path d="M17.4993 2.5C17.9596 2.5 18.3327 2.8731 18.3327 3.33333V15C18.3327 15.4602 17.9596 15.8333 17.4993 15.8333H5.37852L1.66602 18.75V3.33333C1.66602 2.8731 2.03912 2.5 2.49935 2.5H17.4993ZM10.8327 5.83333H9.16602V12.5H10.8327V5.83333ZM14.166 7.5H12.4993V12.5H14.166V7.5ZM7.49935 9.16667H5.83268V12.5H7.49935V9.16667Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card-value">910</div>
+                        </div>
+
+                        <!-- Stat 3 -->
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div class="stat-card-label">사용자<br>(MAU)</div>
+                                <div class="stat-card-icon" style="background: #E8E3FF;">
+                                    <div class="stat-card-icon-bg"></div>
+                                    <div class="stat-card-icon-inner" style="background: #615FFF; border-radius: 6px;">
+                                        <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                            <path d="M16.6673 18.333H3.33398V16.6663C3.33398 14.3652 5.19947 12.4997 7.50065 12.4997H12.5007C14.8018 12.4997 16.6673 14.3652 16.6673 16.6663V18.333ZM10.0007 10.833C7.23923 10.833 5.00065 8.59442 5.00065 5.83301C5.00065 3.07158 7.23923 0.833008 10.0007 0.833008C12.7621 0.833008 15.0007 3.07158 15.0007 5.83301C15.0007 8.59442 12.7621 10.833 10.0007 10.833Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card-value">89</div>
+                        </div>
+
+                        <!-- Stat 4 -->
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div class="stat-card-label">총 토큰<br>사용량</div>
+                                <div class="stat-card-icon" style="background: #E8F3FF;">
+                                    <div class="stat-card-icon-bg"></div>
+                                    <div class="stat-card-icon-inner" style="background: #1447E6; border-radius: 6px;">
+                                        <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                            <path d="M3.33333 4.16667H16.6667V2.5H3.33333V4.16667ZM16.6667 7.5H3.33333V5.83333H16.6667V7.5ZM7.5 10.8333H12.5V9.16667H17.5V16.6667C17.5 17.1269 17.1269 17.5 16.6667 17.5H3.33333C2.8731 17.5 2.5 17.1269 2.5 16.6667V9.16667H7.5V10.8333Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card-value">13.20M</div>
+                        </div>
+
+                        <!-- Stat 5 -->
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <div class="stat-card-label">추론<br>토큰</div>
+                                <div class="stat-card-icon" style="background: #D0F5FF;">
+                                    <div class="stat-card-icon-bg"></div>
+                                    <div class="stat-card-icon-inner" style="background: #00A6F4; border-radius: 6px;">
+                                        <svg style="width: 20px; height: 20px; color: white;" viewBox="0 0 20 20" fill="none">
+                                            <path d="M16.666 2.5L18.3327 5.83333V16.6667C18.3327 17.1269 17.9596 17.5 17.4993 17.5H2.49935C2.03912 17.5 1.66602 17.1269 1.66602 16.6667V5.83627L3.33268 2.5H16.666ZM9.99935 8.33333L6.66602 11.6667H9.16602V15H10.8327V11.6667H13.3327L9.99935 8.33333ZM15.636 4.16667H4.36268L3.53018 5.83333H16.4693L15.636 4.16667Z" fill="white"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="stat-card-value">117.1K</div>
+                        </div>
+                    </div>
+
+                    <!-- CHARTS GRID -->
+                    <div class="charts-grid">
+                        <!-- Bar Chart -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h2 class="chart-title">비인가 에이전트 접근 시도</h2>
+                            </div>
+                            <div class="chart-content">
+                                <div class="chart-legend">
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: var(--color-info-cyan);"></div>
+                                        <span>비인가 에이전트 접근 시도</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <div class="legend-dot" style="background: var(--color-info-purple);"></div>
+                                        <span>사용자(daily)</span>
+                                    </div>
+                                </div>
+
+                                <div class="chart-area">
+                                    <div class="chart-grid">
+                                        <div class="grid-line"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                        <div class="grid-line dashed"></div>
+                                    </div>
+
+                                    <div class="y-axis-labels">
+                                        <div class="y-axis-label">8</div>
+                                        <div class="y-axis-label">7</div>
+                                        <div class="y-axis-label">6</div>
+                                        <div class="y-axis-label">5</div>
+                                        <div class="y-axis-label">4</div>
+                                        <div class="y-axis-label">3</div>
+                                        <div class="y-axis-label">2</div>
+                                        <div class="y-axis-label">1</div>
+                                        <div class="y-axis-label">0</div>
+                                    </div>
+
+                                    <div class="chart-bars">
+                                        <div class="bar-group"><div class="bar" style="height: 25%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 50%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 25%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 87.5%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 25%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 37.5%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 50%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 12.5%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 6.25%;"></div></div>
+                                        <div class="bar-group"><div class="bar" style="height: 12.5%;"></div></div>
+                                    </div>
+
+                                    <svg class="chart-line-container" viewBox="0 0 600 310" preserveAspectRatio="none" style="position: absolute; inset: 0;">
+                                        <polyline points="30,275 90,275 150,128 210,128 270,128 330,184 390,184 450,92 510,92 570,230" fill="none" stroke="var(--color-info-purple)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <circle cx="30" cy="275" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="90" cy="275" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="150" cy="128" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="210" cy="128" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="270" cy="128" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="330" cy="184" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="390" cy="184" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="450" cy="92" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="510" cy="92" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                        <circle cx="570" cy="230" r="5" fill="white" stroke="var(--color-info-purple-dark)" stroke-width="2"/>
+                                    </svg>
+
+                                    <div class="x-axis-labels">
+                                        <div class="x-axis-label">12-03</div>
+                                        <div class="x-axis-label">12-04</div>
+                                        <div class="x-axis-label">12-05</div>
+                                        <div class="x-axis-label">12-06</div>
+                                        <div class="x-axis-label">12-07</div>
+                                        <div class="x-axis-label">12-08</div>
+                                        <div class="x-axis-label">12-09</div>
+                                        <div class="x-axis-label">12-10</div>
+                                        <div class="x-axis-label">12-11</div>
+                                        <div class="x-axis-label active">12-12</div>
+                                    </div>
+
+                                    <div class="chart-tooltip" style="left: 460px; top: 100px;">
+                                        <div class="tooltip-content">
+                                            <div class="tooltip-label">비인가 에이전트 접근 시도</div>
+                                            <div style="display: flex; gap: 4px;">
+                                                <span class="tooltip-label">12-12일 :</span>
+                                                <div class="tooltip-value">1</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Circular Progress Chart -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h2 class="chart-title">시스템 상태</h2>
+                            </div>
+                            <div class="system-status-content">
+                                <div class="circular-progress">
+                                    <svg viewBox="0 0 262 262" fill="none">
+                                        <circle cx="131" cy="131" r="116" fill="none" stroke="var(--color-success-light)" stroke-width="30"/>
+                                        <circle cx="131" cy="131" r="116" fill="none" stroke="var(--color-success)" stroke-width="30" stroke-linecap="round" stroke-dasharray="730" stroke-dashoffset="182" style="transform: rotate(-90deg); transform-origin: 131px 131px;"/>
+                                    </svg>
+                                    <div class="status-text">안전</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+
+        function toggleSubmenu(event) {
+            event.preventDefault();
+            const button = event.currentTarget;
+            const submenuId = button.getAttribute('data-submenu');
+            
+            if (submenuId) {
+                const submenu = document.getElementById(submenuId);
+                if (submenu) {
+                    submenu.classList.toggle('open');
+                }
+            }
+        }
+
+        // Mobile responsive
+        function updateMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (window.innerWidth <= 768) {
+                mobileMenuBtn.style.display = 'flex';
+            } else {
+                mobileMenuBtn.style.display = 'none';
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        // Initial setup
+        window.addEventListener('resize', updateMobileMenu);
+        updateMobileMenu();
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+                if (!sidebar.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
